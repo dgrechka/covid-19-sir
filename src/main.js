@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
- 
-var appDiv = document.createElement('div');
-appDiv.id = "App";
-document.body.appendChild(appDiv);
+
+var elem = document.getElementsByTagName("covid-19-models-app")[0]
+//console.log("elem is "+elem);
 
 new Vue({
-  el: "#App",
+  el: elem,
   render: h => h(App)
 })

@@ -26,7 +26,8 @@ module.exports = {
     plugins: [
       new VueLoaderPlugin(),
       new HtmlWebpackPlugin({
-        title: 'COVID-19 SIR model prediction'
+        title: 'COVID-19 SIR model prediction',
+        template: 'src/index.html'
       })
     ]
   };

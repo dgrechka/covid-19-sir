@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "css-loader": "^3.4.2",
+    "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.0.4",
     "vue-loader": "^15.9.1",
     "vue-template-compiler": "^2.6.11",
@@ -20,6 +21,8 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "jquery": "^3.4.1",
+    "jquery-ui": "^1.12.1",
     "papaparse": "^5.2.0",
     "vue": "^2.6.11"
   }
