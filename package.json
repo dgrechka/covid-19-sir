@@ -1,0 +1,26 @@
+{
+  "name": "covid-19-sir",
+  "version": "1.0.0",
+  "description": "SIR models for COVID-19 spread for different location worldwide",
+  "private": true,
+  "repository": "https://github.com/dgrechka/covid-19-sir.git",
+  "author": "Dmitry Grechka <dmitry@grechka.family>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "webpack-dev-server --hot --open",
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "css-loader": "^3.4.2",
+    "html-webpack-plugin": "^4.0.4",
+    "vue-loader": "^15.9.1",
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "papaparse": "^5.2.0",
+    "vue": "^2.6.11"
+  }
+}
