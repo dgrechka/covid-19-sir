@@ -1,11 +1,9 @@
 <template>  
   <form action="#">
-  <fieldset>
     <label for="location-selection">Select location:</label>
     <select name="location-selection" v-model="selected">
         <option v-for="option in options" :key="option.value" v-bind:value="option">{{ option.text }}</option>
     </select>
-  </fieldset>
   </form>
 </template>
 
@@ -41,8 +39,13 @@ export default {
 </script>
  
 <style>
-#hello {
-  font-family: Verdana;
-  color: navy;
+select {
+  font-size: 1.5em;
+}
+label {
+  font-size: 1.5em;
+}
+form {
+  margin: 10px 0 0 0;
 }
 </style>

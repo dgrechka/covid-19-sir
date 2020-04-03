@@ -1,5 +1,6 @@
 <template>  
   <div id="App">
+    <h1>COVID-19 spread modelling (as on {{fitDate}})</h1>
     <div v-if="!catalogLoaded">
         <p>Loading locations...</p>
     </div>
@@ -9,8 +10,38 @@
             <fitted-parameters v-bind:parameters="selectedLocation.params"></fitted-parameters>
             <fit-figure v-bind:datasetURL="datasetURL" v-bind:locationKey="selectedLocation.value"></fit-figure>
         </div>
-        <div v-if="!selectedLocation">
-            About page
+        <div v-if="!selectedLocation" class="about">
+            <p>This app provides a way to explore COVID-19 epidemic dynamics prediction using SIR modelling.
+                
+                I made these predictions a a part of <a href="https://www.kaggle.com/c/covid19-global-forecasting-week-3/" target="_BLANK">Kaggle COVID19 Global Forecasting Challenge</a>.
+                I also publish the predictions as <a href="" target="_BLANK">public Kaggle dataset</a>. 
+                I try to update the predictions daily both here and on Kaggle.</p>
+                <p>The model is defined as ODE system as follows:</p>
+                <img src='https://wikimedia.org/api/rest_v1/media/math/render/svg/29728a7d4bebe8197dca7d873d81b9dce954522e'>
+                <p>The models are fitted on <a href='https://github.com/CSSEGISandData/COVID-19' target="_BLANK">John Hopkins University data</a> (time series) using several runs of Nelder-Mead simplex optimization method (best run is taken) starting at different initial locations and RMSE as a loss.</p>
+
+                <p>What parameters are fitted (estimated) per country/province:</p>
+                <ul>
+                    <li>the day when the infection emerged in the country</li>
+                    <li>the initial infected count on the first day of the infection</li>
+                    <li>beta - an average number of contacts (sufficient to spread the disease) per day each infected individual has</li>
+                    <li>gamma - fixed fraction of the infected group that will recover during any given day</li>
+                    <li>R0 - how many susceptible people are infected (on average) by single infected individual. Equals beta/gamma</li>
+                    <li>initial susceptible population (e.g. init suscept pop in the figures) - how many people are susceptible with regards to the quarantine measures at the modelled location</li>
+                </ul>
+
+                <p>How to read the figures.</p>
+                <ul>
+                    <li>points are real observed data provided by Johns Hopkins University</li>
+                    <li>curves are model prediction</li>
+                </ul>
+                <ul>
+                    <li>blue is susceptible population - people that are not yet infected but can get the infection
+                    <li>red is infected population</li>
+                    <li>green is removed population (recovered or dead). people that are not susceptible any more as they came through the infection.</li>
+                </ul>
+                <hr>
+                <p>Dmitry Grechka 2020<br>dmitry&lt;at&gt;grechka.family</p>
         </div>
     </div>
   </div>
@@ -28,8 +59,8 @@ export default {
   data () {
     return {
       catalogLoaded: false,
-      datasetURL: "/dataset",
-      dataDate: "2 April 2020",
+      datasetURL: "dataset",
+      fitDate: "2 April 2020",
       locations: [],
       selectedLocation: null
     }
@@ -84,8 +115,20 @@ export default {
 </script>
  
 <style>
-#hello {
-  font-family: Verdana;
-  color: navy;
-}
+    body {
+        background: #eeeeee;
+    }
+    div.about {
+        border-radius: 4px;
+        background: white;
+        padding: 0.5em;
+        margin: 1em 0.1em 0 0.1em;
+    }
+    h1 {
+        margin: 0.5em 0 0 1pt;
+        font-size: 2em;
+    }
+    h2 {
+        margin: 0.5em 0 0 1pt;
+    }
 </style>
