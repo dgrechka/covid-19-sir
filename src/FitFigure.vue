@@ -14,11 +14,14 @@ export default {
       datasetURL : {
           type: String,
           required: true
+      },
+      cacheBraker: {
+        type: String
       }
   },
   computed : {
       imgSrc : function() {
-          return this.datasetURL + "/per_location_figures/"+this.locationKey+".png"
+          return this.datasetURL + "/per_location_figures/"+this.locationKey+".png?"+"cacheBraker="+this.cacheBraker;
       }
   }
 }

@@ -8,7 +8,7 @@
         <location-selector @selectedChanged="locationSelected"  v-bind:options="locations"></location-selector>
         <div v-if="selectedLocation">
             <fitted-parameters v-bind:parameters="selectedLocation.params"></fitted-parameters>
-            <fit-figure v-bind:datasetURL="datasetURL" v-bind:locationKey="selectedLocation.value"></fit-figure>
+            <fit-figure v-bind:cacheBraker="fitDate" v-bind:datasetURL="datasetURL" v-bind:locationKey="selectedLocation.value"></fit-figure>
         </div>
         <div v-if="!selectedLocation" class="about">
             <p>This app provides a way to explore COVID-19 epidemic dynamics prediction using SIR modelling.
@@ -60,7 +60,7 @@ export default {
     return {
       catalogLoaded: false,
       datasetURL: "dataset",
-      fitDate: "2 April 2020",
+      fitDate: "3 April 2020",
       locations: [],
       selectedLocation: null
     }
@@ -71,7 +71,7 @@ export default {
     }
   },
   created: function() {
-        var paramsURL = this.datasetURL+"/per_location_fitted_params.csv"
+        var paramsURL = this.datasetURL+"/per_location_fitted_params.csv?cacheBraker="+this.fitDate;
         console.log("Loading fitted locations from "+paramsURL)
         var vm = this;
         Papa.parse(paramsURL, {
