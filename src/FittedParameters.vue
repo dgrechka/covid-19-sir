@@ -18,7 +18,12 @@
             <div class="pUnits">people</div>
         </div>
         <div class="pRow">
-            <div class="pName">Average infected person recovers in</div>
+            <div class="pName">Average time between single infected person infects next susceptible (1/β)</div>
+            <div class="pVal">{{1.0/parameters.Beta | formatDays}}</div>
+            <div class="pUnits">days</div>
+        </div>
+        <div class="pRow">
+            <div class="pName">Average infected person recovers in (1/γ)</div>
             <div class="pVal">{{1.0/parameters.Gamma | formatDays}}</div>
             <div class="pUnits">days</div>
         </div>
@@ -36,12 +41,12 @@
             <div class="pUnits">people</div>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">Beta</div>
+            <div class="pName">Beta (β)</div>
             <div class="pVal">{{parameters.Beta | formatTwoDecimal}}</div>
-            <div class="pUnits"></div>
+            <div class="pUnits">days<sup>-1</sup></div>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">Gamma</div>
+            <div class="pName">Gamma (γ)</div>
             <div class="pVal">{{parameters.Gamma | formatTwoDecimal}}</div>
             <div class="pUnits">days<sup>-1</sup></div>
         </div>

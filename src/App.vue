@@ -40,7 +40,7 @@
                     <li>red is infected population</li>
                     <li>green is removed population (recovered or dead). people that are not susceptible any more as they came through the infection.</li>
                 </ul>
-                <p>The predictions is recomputed regularly using <a href='https://github.com/itislab/alpheus' target="_BLANK">Alpheus computational experiments framework</a> 
+                <p>The predictions are recomputed regularly using <a href='https://github.com/itislab/alpheus' target="_BLANK">Alpheus computational experiments framework</a> 
                 <p>The model fitting code is published at <a href="https://github.com/Yet-Another-Team/covid19-global-forecasting" target="_BLANK">github</a></p>
                 <p>The web app is also published at <a href="https://github.com/dgrechka/covid-19-sir" target="_BLANK">github</a></p>
                 <hr>
