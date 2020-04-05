@@ -29,7 +29,8 @@ export default {
  
 <style>
 .fit-figure {
-  width: 95%;
+  width: 100%;
+  max-width: 600px;
   border-radius: 4px;
   margin: 5px;
   padding: 0.1em;

@@ -6,7 +6,7 @@
     </div>
     <div v-if="catalogLoaded">
         <location-selector @selectedChanged="locationSelected"  v-bind:options="locations"></location-selector>
-        <div v-if="selectedLocation">
+        <div class="location-info" v-if="selectedLocation">
             <fitted-parameters v-bind:parameters="selectedLocation.params"></fitted-parameters>
             <fit-figure v-bind:cacheBraker="fitDate" v-bind:datasetURL="datasetURL" v-bind:locationKey="selectedLocation.value"></fit-figure>
         </div>
@@ -62,7 +62,7 @@ export default {
   data () {
     return {
       catalogLoaded: false,
-      datasetURL: "/dataset",
+      datasetURL: "dataset",
       fitDate: "4 April 2020",
       locations: [],
       selectedLocation: null
@@ -120,6 +120,10 @@ export default {
 <style>
     body {
         background: #eeeeee;
+    }
+    div.location-info {
+        display: flex;
+        flex-wrap: wrap;
     }
     div.about {
         border-radius: 4px;

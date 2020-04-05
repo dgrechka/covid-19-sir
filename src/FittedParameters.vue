@@ -38,6 +38,7 @@
         <div v-if="expanded" class="pRow">
             <div class="pName">Beta</div>
             <div class="pVal">{{parameters.Beta | formatTwoDecimal}}</div>
+            <div class="pUnits"></div>
         </div>
         <div v-if="expanded" class="pRow">
             <div class="pName">Gamma</div>
@@ -52,6 +53,7 @@
         <div v-if="expanded" class="pRow">
             <div class="pName">Infection start date </div>
             <div class="pVal">{{parameters.FirstDate | formatDate}}</div>
+            <div class="pUnits"></div>
         </div>
         <div v-if="expanded" class="pRow">
             <div class="pName">Infected count on first infection day</div>
@@ -116,6 +118,8 @@ export default {
 div.paramsArea {
     background: white;
     border-radius: 3px;
+    width: 100%;
+    max-width: 600px;
     margin: 10px;
     padding: 0.1em;
 
@@ -131,21 +135,21 @@ div.params {
 }
 div.pRow {
     display: flex;
-    margin: 4px 0 4px 0;
+    margin: 2px 0 3px 0;
     align-items: baseline;
 }
 div.pName {
-    width: 30%;
+    width: 50%;
     font-size: 1em;
 }
 div.pVal {
-    width: 15%;
+    width: 30%;
     font-size: 1em;
     text-align: end;
 }
 div.pUnits {
     margin-left: 1em;
-    width: 10%;
+    width: 20%;
     font-size: 1em;
 }
 span {
