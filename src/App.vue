@@ -11,10 +11,10 @@
             <fit-figure v-bind:cacheBraker="fitDate" v-bind:datasetURL="datasetURL" v-bind:locationKey="selectedLocation.value"></fit-figure>
         </div>
         <div v-if="!selectedLocation" class="about">
-            <p>This app provides a way to explore COVID-19 epidemic dynamics prediction using SIR modelling.
+            <p>This app provides a way to explore COVID-19 epidemic dynamics prediction using <a href='https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model' target="_BLANK">SIR modelling</a>.
                 
-                I made these predictions a a part of <a href="https://www.kaggle.com/c/covid19-global-forecasting-week-3/" target="_BLANK">Kaggle COVID19 Global Forecasting Challenge</a>.
-                I also publish the predictions as <a href="" target="_BLANK">public Kaggle dataset</a>. 
+                I made these predictions as a part of <a href="https://www.kaggle.com/c/covid19-global-forecasting-week-3/" target="_BLANK">Kaggle COVID19 Global Forecasting Challenge</a>.
+                I also publish the predictions as <a href="https://www.kaggle.com/dgrechka/covid19-global-forecast-sir-jhu-timeseries-fit" target="_BLANK">public Kaggle dataset</a>. 
                 I try to update the predictions daily both here and on Kaggle.</p>
                 <p>The model is defined as ODE system as follows:</p>
                 <img src='https://wikimedia.org/api/rest_v1/media/math/render/svg/29728a7d4bebe8197dca7d873d81b9dce954522e'>
@@ -40,6 +40,9 @@
                     <li>red is infected population</li>
                     <li>green is removed population (recovered or dead). people that are not susceptible any more as they came through the infection.</li>
                 </ul>
+                <p>The predictions is recomputed regularly using <a href='https://github.com/itislab/alpheus' target="_BLANK">Alpheus computational experiments framework</a> 
+                <p>The model fitting code is published at <a href="https://github.com/Yet-Another-Team/covid19-global-forecasting" target="_BLANK">github</a></p>
+                <p>The web app is also published at <a href="https://github.com/dgrechka/covid-19-sir" target="_BLANK">github</a></p>
                 <hr>
                 <p>Dmitry Grechka 2020<br>dmitry&lt;at&gt;grechka.family</p>
         </div>
@@ -59,8 +62,8 @@ export default {
   data () {
     return {
       catalogLoaded: false,
-      datasetURL: "dataset",
-      fitDate: "3 April 2020",
+      datasetURL: "/dataset",
+      fitDate: "4 April 2020",
       locations: [],
       selectedLocation: null
     }

@@ -1,36 +1,67 @@
 <template>
   <div class="paramsArea">
-  <h3>Estimated SIR model paramters:</h3>
+  <h3>SIR model parameters:</h3>
   <div class="params">
-        <div class="pRow">
-            <div class="pName">Date of infection peak (<strong>estimated</strong>)</div><div class="pVal">{{parameters.PeakDate}}</div>
+      <div class="pRow">
+            <div class="pName"><strong>Parameter</strong></div>
+            <div class="pVal"><strong>Estimated Value</strong></div>
+            <div class="pUnits"><strong>Units</strong></div>
         </div>
         <div class="pRow">
-            <div class="pName">Peak Infected Count (<strong>estimated</strong>)</div><div class="pVal">{{parameters.PeakDayInfectedCount}}</div>
+            <div class="pName">Date of infection peak</div>
+            <div class="pVal">{{parameters.PeakDate | formatDate}}</div>
+            <div class="pUnits"></div>
         </div>
         <div class="pRow">
-            <div class="pName">Location population</div><div class="pVal">{{parameters.TotalPopulation}}</div>
+            <div class="pName">Peak Infected Count</div>
+            <div class="pVal">{{parameters.PeakDayInfectedCount | formatPopulation}}</div>
+            <div class="pUnits">people</div>
+        </div>
+        <div class="pRow">
+            <div class="pName">Average infected person recovers in</div>
+            <div class="pVal">{{1.0/parameters.Gamma | formatDays}}</div>
+            <div class="pUnits">days</div>
+        </div>
+        <div class="pRow">
+            <div class="pName">Location population</div>
+            <div class="pVal">{{parameters.TotalPopulation | formatPopulation}}</div>
+            <div class="pUnits">people</div>
         </div>
         <div v-if="!expanded" class="pRow">
             <span @click="toggleExpand">More...</span>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">Susceptible population</div><div class="pVal">{{parameters.EstimatedSusceptiblePopulation}}</div>
+            <div class="pName">Susceptible population</div>
+            <div class="pVal">{{parameters.EstimatedSusceptiblePopulation | formatPopulation}}</div>
+            <div class="pUnits">people</div>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">Beta</div><div class="pVal">{{parameters.Beta}}</div>
+            <div class="pName">Beta</div>
+            <div class="pVal">{{parameters.Beta | formatTwoDecimal}}</div>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">Gamma</div><div class="pVal">{{parameters.Gamma}}</div>
+            <div class="pName">Gamma</div>
+            <div class="pVal">{{parameters.Gamma | formatTwoDecimal}}</div>
+            <div class="pUnits">days<sup>-1</sup></div>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">R0</div><div class="pVal">{{parameters.R0}}</div>
+            <div class="pName">R0</div>
+            <div class="pVal">{{parameters.R0 | formatR0}}</div>
+            <div class="pUnits">people</div>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">Infection start date </div><div class="pVal">{{parameters.FirstDate}}</div>
+            <div class="pName">Infection start date </div>
+            <div class="pVal">{{parameters.FirstDate | formatDate}}</div>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">Infected count on first infection day</div><div class="pVal">{{parameters.FirstDayInfectedCount}}</div>
+            <div class="pName">Infected count on first infection day</div>
+            <div class="pVal">{{parameters.FirstDayInfectedCount | formatPopulation}}</div>
+            <div class="pUnits">people</div>
+        </div>
+        <div v-if="expanded" class="pRow">
+            <div class="pName">Achieved loss (RMSE)</div>
+            <div class="pVal">{{parameters.Loss | formatTwoDecimal}}</div>
+            <div class="pUnits">people</div>
         </div>
         <div  v-if="expanded" class="pRow">
             <span @click="toggleExpand">Show less</span>
@@ -40,8 +71,7 @@
 </template>
 
 <script>
-// import $ from 'jquery'
-// import * as jQuery from "jquery-ui"
+import numeral from 'numeral'
 
 export default {
   name: 'fitted-parameters',
@@ -53,6 +83,25 @@ export default {
   methods: {
       toggleExpand: function() {
           this.expanded = !this.expanded;
+      }
+  },
+  filters: {
+      formatPopulation : function(value) {
+          return numeral(value).format("0,0"); // displaying other groupings/separators is possible, look at the docs
+      },
+      formatDays : function(value) {
+          return numeral(value).format("0.");
+      },
+      formatR0 : function(value) {
+          return numeral(value).format("0.0");
+      },
+      formatTwoDecimal : function(value) {
+          return numeral(value).format("0.00");
+      },
+      formatDate : function(value) {
+          const options = { year: 'numeric', month: 'long', day: 'numeric' };
+          var d = new Date(value)
+          return d.toLocaleDateString("en-UK",options);
       }
   },
   data () {
@@ -82,13 +131,21 @@ div.params {
 }
 div.pRow {
     display: flex;
-    margin: 0 0 4px 0;
+    margin: 4px 0 4px 0;
+    align-items: baseline;
 }
 div.pName {
-    width: 50%;
+    width: 30%;
     font-size: 1em;
 }
 div.pVal {
+    width: 15%;
+    font-size: 1em;
+    text-align: end;
+}
+div.pUnits {
+    margin-left: 1em;
+    width: 10%;
     font-size: 1em;
 }
 span {
