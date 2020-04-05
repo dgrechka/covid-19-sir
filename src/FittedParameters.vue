@@ -53,7 +53,7 @@
         <div v-if="expanded" class="pRow">
             <div class="pName">R0</div>
             <div class="pVal">{{parameters.R0 | formatR0}}</div>
-            <div class="pUnits">people</div>
+            <div class="pUnits"></div>
         </div>
         <div v-if="expanded" class="pRow">
             <div class="pName">Infection start date </div>
