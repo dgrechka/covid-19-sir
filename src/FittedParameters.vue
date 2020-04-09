@@ -1,6 +1,6 @@
 <template>
   <div class="paramsArea">
-  <h3>SIR model parameters:</h3>
+  <h3>SEIR model parameters:</h3>
   <div class="params">
       <div class="pRow">
             <div class="pName"><strong>Parameter</strong></div>
@@ -9,31 +9,36 @@
         </div>
         <div class="pRow">
             <div class="pName">Date of infection peak</div>
-            <div class="pVal">{{parameters.PeakDate | formatDate}}</div>
+            <div class="pVal">{{parameters.PeakInfectedDate | formatDate}}</div>
             <div class="pUnits"></div>
         </div>
         <div class="pRow">
             <div class="pName">Peak Infected Count</div>
-            <div class="pVal">{{parameters.PeakDayInfectedCount | formatPopulation}}</div>
+            <div class="pVal">{{parameters.PeakInfectedCount | formatPopulation}}</div>
             <div class="pUnits">people</div>
         </div>
         <div class="pRow">
             <div class="pName">Average time between single infected person infects next susceptible (1/β)</div>
-            <div class="pVal">{{1.0/parameters.Beta | formatDays}}</div>
+            <div class="pVal">{{1.0/parameters.Beta | formatOneDecimal}}</div>
+            <div class="pUnits">days</div>
+        </div>
+        <div class="pRow">
+            <div class="pName">Average incubation period (1/σ)</div>
+            <div class="pVal">{{1.0/parameters.Sigma | formatOneDecimal}}</div>
             <div class="pUnits">days</div>
         </div>
         <div class="pRow">
             <div class="pName">Average infected person recovers in (1/γ)</div>
-            <div class="pVal">{{1.0/parameters.Gamma | formatDays}}</div>
+            <div class="pVal">{{1.0/parameters.Gamma | formatOneDecimal}}</div>
             <div class="pUnits">days</div>
-        </div>
-        <div class="pRow">
-            <div class="pName">Location population</div>
-            <div class="pVal">{{parameters.TotalPopulation | formatPopulation}}</div>
-            <div class="pUnits">people</div>
         </div>
         <div v-if="!expanded" class="pRow">
             <span @click="toggleExpand">More...</span>
+        </div>
+        <div v-if="expanded" class="pRow">
+            <div class="pName">Location population</div>
+            <div class="pVal">{{parameters.TotalPopulation | formatPopulation}}</div>
+            <div class="pUnits">people</div>
         </div>
         <div v-if="expanded" class="pRow">
             <div class="pName">Susceptible population</div>
@@ -46,12 +51,17 @@
             <div class="pUnits">days<sup>-1</sup></div>
         </div>
         <div v-if="expanded" class="pRow">
+            <div class="pName">Sigma (σ)</div>
+            <div class="pVal">{{parameters.Sigma | formatTwoDecimal}}</div>
+            <div class="pUnits">days<sup>-1</sup></div>
+        </div>
+        <div v-if="expanded" class="pRow">
             <div class="pName">Gamma (γ)</div>
             <div class="pVal">{{parameters.Gamma | formatTwoDecimal}}</div>
             <div class="pUnits">days<sup>-1</sup></div>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">R0</div>
+            <div class="pName">R<sub>0</sub></div>
             <div class="pVal">{{parameters.R0 | formatR0}}</div>
             <div class="pUnits"></div>
         </div>
@@ -61,9 +71,24 @@
             <div class="pUnits"></div>
         </div>
         <div v-if="expanded" class="pRow">
+            <div class="pName">Exposed count on first infection day</div>
+            <div class="pVal">{{parameters.FirstDayExposedCount | formatPopulation}}</div>
+            <div class="pUnits">people</div>
+        </div>
+        <div v-if="expanded" class="pRow">
             <div class="pName">Infected count on first infection day</div>
             <div class="pVal">{{parameters.FirstDayInfectedCount | formatPopulation}}</div>
             <div class="pUnits">people</div>
+        </div>
+        <div v-if="expanded" class="pRow">
+            <div class="pName">Peak Exposed count</div>
+            <div class="pVal">{{parameters.PeakExposedCount | formatPopulation}}</div>
+            <div class="pUnits">people</div>
+        </div>
+        <div v-if="expanded" class="pRow">
+            <div class="pName">Day of Exposed peak</div>
+            <div class="pVal">{{parameters.PeakExposedDate | formatDate}}</div>
+            <div class="pUnits"></div>
         </div>
         <div v-if="expanded" class="pRow">
             <div class="pName">Achieved loss (RMSE)</div>
@@ -104,6 +129,9 @@ export default {
       },
       formatTwoDecimal : function(value) {
           return numeral(value).format("0.00");
+      },
+      formatOneDecimal : function(value) {
+          return numeral(value).format("0.0");
       },
       formatDate : function(value) {
           const options = { year: 'numeric', month: 'long', day: 'numeric' };

@@ -7,17 +7,25 @@
     <div v-if="catalogLoaded">
         <location-selector @selectedChanged="locationSelected"  v-bind:options="locations"></location-selector>
         <div class="location-info" v-if="selectedLocation">
+            <div class="disclaimer"><i>Disclaimer: The results are obtained using automatic tool. Consider visual Quality Control of the fit before taking the numbers below seriously!</i></div>
             <fitted-parameters v-bind:parameters="selectedLocation.params"></fitted-parameters>
             <fit-figure v-bind:cacheBraker="fitDate" v-bind:datasetURL="datasetURL" v-bind:locationKey="selectedLocation.value"></fit-figure>
         </div>
         <div v-if="!selectedLocation" class="about">
-            <p>This app provides a way to explore COVID-19 epidemic dynamics prediction using <a href='https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model' target="_BLANK">SIR modelling</a>.
+            <p>This app provides a way to explore COVID-19 epidemic dynamics prediction using <a href='https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model' target="_BLANK">SEIR modelling</a>.
                 
                 I made these predictions as a part of <a href="https://www.kaggle.com/c/covid19-global-forecasting-week-3/" target="_BLANK">Kaggle COVID19 Global Forecasting Challenge</a>.
                 I also publish the predictions as <a href="https://www.kaggle.com/dgrechka/covid19-global-forecast-sir-jhu-timeseries-fit" target="_BLANK">public Kaggle dataset</a>. 
                 I try to update the predictions daily both here and on Kaggle.</p>
                 <p>The model is defined as ODE system as follows:</p>
-                <img src='https://wikimedia.org/api/rest_v1/media/math/render/svg/29728a7d4bebe8197dca7d873d81b9dce954522e'>
+                <img src='https://idmod.org/docs/hiv/_images/math/5c34ba7654b6b1031ac83c60ea98007456d22ee3.png'>
+                <p>Where</p>
+                <ul>
+                    <li>S - susceptible, subjects who can catch the infection</li>
+                    <li>E - exposed, subjects who is infected but not yet contagious (e.g. in incubation period)</li>
+                    <li>I - infected, contagious subjects</li>
+                    <li>R - removed, subjects either recovered or died due to disease</li>
+                </ul>
                 <p>The models are fitted on <a href='https://github.com/CSSEGISandData/COVID-19' target="_BLANK">John Hopkins University data</a> (time series) using several runs of Nelder-Mead simplex optimization method (best run is taken) starting at different initial locations and RMSE as a loss.</p>
 
                 <p>What parameters are fitted (estimated) per country/province:</p>
@@ -34,11 +42,6 @@
                 <ul>
                     <li>points are real observed data provided by Johns Hopkins University</li>
                     <li>curves are model prediction</li>
-                </ul>
-                <ul>
-                    <li>blue is susceptible population - people that are not yet infected but can get the infection
-                    <li>red is infected population</li>
-                    <li>green is removed population (recovered or dead). people that are not susceptible any more as they came through the infection.</li>
                 </ul>
                 <p>The predictions are recomputed regularly using <a href='https://github.com/itislab/alpheus' target="_BLANK">Alpheus computational experiments framework</a> 
                 <p>The model fitting code is published at <a href="https://github.com/Yet-Another-Team/covid19-global-forecasting" target="_BLANK">github</a></p>
@@ -63,7 +66,7 @@ export default {
     return {
       catalogLoaded: false,
       datasetURL: "dataset",
-      fitDate: "4 April 2020",
+      fitDate: "9 April 2020",
       locations: [],
       selectedLocation: null
     }
@@ -86,12 +89,20 @@ export default {
                     let paramNames = []
                     var heading = results.data[0]
                     var N = results.data.length-1;
-                    for(var i=2;i<heading.length;i++)
-                        paramNames.push(heading[i]);
+                    var countryColIdx = -1;
+                    var provinceColIdx = -1;
+                    for(var i=0;i<heading.length;i++) {
+                        if(heading[i] == "Country")
+                            countryColIdx = i;
+                        else if(heading[i] == "Province")
+                            provinceColIdx = i;
+                        else
+                            paramNames.push(heading[i]);
+                    }
                     for(var i=1;i<N;i++) {
                         var row = results.data[i];
-                        var province = row[0];
-                        var country = row[1];
+                        var province = row[provinceColIdx];
+                        var country = row[countryColIdx];
                         var locKey = "";
                         var locText = "";
                         if(province.length>0) {
@@ -102,8 +113,13 @@ export default {
                             locText = country;
                         }
                         var paramsObj = {};
-                        for(var j=0; j<paramNames.length;j++) {
-                            paramsObj[paramNames[j]]=row[j+2]
+                        var skipCount = 0;
+                        for(var j=0; j<paramNames.length+2;j++) {
+                            if((j == countryColIdx) || (j== provinceColIdx)) {
+                                skipCount ++;
+                                continue;
+                            }
+                            paramsObj[paramNames[j-skipCount]]=row[j]
                         }
                         
                         locs.push({'value':locKey, 'text':locText, 'params':paramsObj });
@@ -120,10 +136,13 @@ export default {
 <style>
     body {
         background: #eeeeee;
-    }
+    }   
     div.location-info {
         display: flex;
         flex-wrap: wrap;
+    }
+    div.disclaimer {
+        margin: 5px 5px 5px 1pt;
     }
     div.about {
         border-radius: 4px;
