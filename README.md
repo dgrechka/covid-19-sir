@@ -4,6 +4,6 @@ The app provides a way to explore COVID-19 epidemic dynamics prediction using [S
 
 [![Build Status](https://travis-ci.org/dgrechka/covid-19-sir.svg?branch=master)](https://travis-ci.org/dgrechka/covid-19-sir)
 
-The app is deployed [here](https://grechka.family/dmitry/blog/explore-covid-19-predictions/).
+The app with recent predictions is deployed [here](https://grechka.family/dmitry/blog/explore-covid-19-predictions/).
 
 ![App Preview](https://grechka.family/dmitry/sandbox/covid19/recent/preview.PNG)
