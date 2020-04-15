@@ -7,6 +7,7 @@
     <div v-if="catalogLoaded">
         <location-selector @selectedChanged="locationSelected"  v-bind:options="locations"></location-selector>
         <div class="location-info" v-if="selectedLocation">
+            <div class="disclaimer"><i>Disclaimer: The results are obtained using automatic tool. Consider visual Quality Control of the fit before taking the numbers below seriously!</i></div>
             <fitted-parameters v-bind:parameters="selectedLocation.params"></fitted-parameters>
             <fit-figure v-bind:cacheBraker="fitDate" v-bind:datasetURL="datasetURL" v-bind:locationKey="selectedLocation.value"></fit-figure>
         </div>
@@ -15,19 +16,24 @@
                 
                 I made these predictions as a part of <a href="https://www.kaggle.com/c/covid19-global-forecasting-week-3/" target="_BLANK">Kaggle COVID19 Global Forecasting Challenge</a>.
                 I also publish the predictions as <a href="https://www.kaggle.com/dgrechka/covid19-global-forecast-sir-jhu-timeseries-fit" target="_BLANK">public Kaggle dataset</a>. 
-                I try to update the predictions daily both here and on Kaggle.</p>
+                I try to update the predictions daily both here and on Kaggle. But due to limited compute power, there can be delays couple of days long.</p>
                 <p>The model is defined as ODE system as follows:</p>
                 <img src='https://wikimedia.org/api/rest_v1/media/math/render/svg/29728a7d4bebe8197dca7d873d81b9dce954522e'>
+                <p>Where</p>
+                <ul>
+                    <li>S - susceptible, subjects who can catch the infection</li>
+                    <li>I - infected, contagious subjects</li>
+                    <li>R - removed, subjects either recovered or died due to disease</li>
+                </ul>
                 <p>The models are fitted on <a href='https://github.com/CSSEGISandData/COVID-19' target="_BLANK">John Hopkins University data</a> (time series) using several runs of Nelder-Mead simplex optimization method (best run is taken) starting at different initial locations and RMSE as a loss.</p>
 
                 <p>What parameters are fitted (estimated) per country/province:</p>
                 <ul>
                     <li>the day when the infection emerged in the country</li>
                     <li>the initial infected count on the first day of the infection</li>
-                    <li>beta - an average number of contacts (sufficient to spread the disease) per day each infected individual has</li>
+                    <li>beta (weekly [spline model]) - an average number of contacts (sufficient to spread the disease) per day each infected individual has</li>
                     <li>gamma - fixed fraction of the infected group that will recover during any given day</li>
-                    <li>R0 - how many susceptible people are infected (on average) by single infected individual. Equals beta/gamma</li>
-                    <li>initial susceptible population (e.g. init suscept pop in the figures) - how many people are susceptible with regards to the quarantine measures at the modelled location</li>
+                    <li>R0 (weekly [spline model]) - Equals beta/gamma</li>
                 </ul>
 
                 <p>How to read the figures.</p>
@@ -63,7 +69,7 @@ export default {
     return {
       catalogLoaded: false,
       datasetURL: "dataset",
-      fitDate: "4 April 2020",
+      fitDate: "13 April 2020",
       locations: [],
       selectedLocation: null
     }
@@ -74,7 +80,7 @@ export default {
     }
   },
   created: function() {
-        var paramsURL = this.datasetURL+"/per_location_fitted_params.csv?cacheBraker="+this.fitDate;
+        var paramsURL = this.datasetURL+"/params.csv?cacheBraker="+this.fitDate;
         console.log("Loading fitted locations from "+paramsURL)
         var vm = this;
         Papa.parse(paramsURL, {
@@ -86,12 +92,20 @@ export default {
                     let paramNames = []
                     var heading = results.data[0]
                     var N = results.data.length-1;
-                    for(var i=2;i<heading.length;i++)
-                        paramNames.push(heading[i]);
+                    var countryColIdx = -1;
+                    var provinceColIdx = -1;
+                    for(var i=0;i<heading.length;i++) {
+                        if(heading[i] == "Country")
+                            countryColIdx = i;
+                        else if(heading[i] == "Province")
+                            provinceColIdx = i;
+                        else
+                            paramNames.push(heading[i]);
+                    }
                     for(var i=1;i<N;i++) {
                         var row = results.data[i];
-                        var province = row[0];
-                        var country = row[1];
+                        var province = row[provinceColIdx];
+                        var country = row[countryColIdx];
                         var locKey = "";
                         var locText = "";
                         if(province.length>0) {
@@ -102,8 +116,13 @@ export default {
                             locText = country;
                         }
                         var paramsObj = {};
-                        for(var j=0; j<paramNames.length;j++) {
-                            paramsObj[paramNames[j]]=row[j+2]
+                        var skipCount = 0;
+                        for(var j=0; j<paramNames.length+2;j++) {
+                            if((j == countryColIdx) || (j== provinceColIdx)) {
+                                skipCount ++;
+                                continue;
+                            }
+                            paramsObj[paramNames[j-skipCount]]=row[j]
                         }
                         
                         locs.push({'value':locKey, 'text':locText, 'params':paramsObj });

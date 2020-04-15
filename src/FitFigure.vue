@@ -21,7 +21,7 @@ export default {
   },
   computed : {
       imgSrc : function() {
-          return this.datasetURL + "/per_location_figures/"+this.locationKey+".png?"+"cacheBraker="+this.cacheBraker;
+          return this.datasetURL + "/figures/"+this.locationKey+".png?"+"cacheBraker="+this.cacheBraker;
       }
   }
 }

@@ -18,8 +18,8 @@
             <div class="pUnits">people</div>
         </div>
         <div class="pRow">
-            <div class="pName">Average time between single infected person infects next susceptible (1/β)</div>
-            <div class="pVal">{{1.0/parameters.Beta | formatDays}}</div>
+            <div class="pName">Transmission interval of recent week<br/>(average time between single infected person infects next susceptible : 1/β)</div>
+            <div class="pVal">{{1.0/parameters.RecentBeta | formatDays}}</div>
             <div class="pUnits">days</div>
         </div>
         <div class="pRow">
@@ -36,14 +36,9 @@
             <span @click="toggleExpand">More...</span>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">Susceptible population</div>
-            <div class="pVal">{{parameters.EstimatedSusceptiblePopulation | formatPopulation}}</div>
-            <div class="pUnits">people</div>
-        </div>
-        <div v-if="expanded" class="pRow">
-            <div class="pName">Beta (β)</div>
-            <div class="pVal">{{parameters.Beta | formatTwoDecimal}}</div>
-            <div class="pUnits">days<sup>-1</sup></div>
+            <div class="pName"><b>Recent week beta (β)</b></div>
+            <div class="pVal"><b>{{parameters.RecentBeta | formatTwoDecimal}}</b></div>
+            <div class="pUnits"><b>days<sup>-1</sup></b></div>
         </div>
         <div v-if="expanded" class="pRow">
             <div class="pName">Gamma (γ)</div>
@@ -51,8 +46,8 @@
             <div class="pUnits">days<sup>-1</sup></div>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">R0</div>
-            <div class="pVal">{{parameters.R0 | formatR0}}</div>
+            <div class="pName">Recent week R<sub>0</sub></div>
+            <div class="pVal">{{parameters.RecentR0 | formatR0}}</div>
             <div class="pUnits"></div>
         </div>
         <div v-if="expanded" class="pRow">
@@ -66,9 +61,9 @@
             <div class="pUnits">people</div>
         </div>
         <div v-if="expanded" class="pRow">
-            <div class="pName">Achieved loss (RMSE)</div>
+            <div class="pName">Achieved loss (RMSE + regul. term)</div>
             <div class="pVal">{{parameters.Loss | formatTwoDecimal}}</div>
-            <div class="pUnits">people</div>
+            <div class="pUnits"></div>
         </div>
         <div  v-if="expanded" class="pRow">
             <span @click="toggleExpand">Show less</span>
