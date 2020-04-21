@@ -7,7 +7,7 @@
     <div v-if="catalogLoaded">
         <location-selector @selectedChanged="locationSelected"  v-bind:options="locations"></location-selector>
         <div class="location-info" v-if="selectedLocation">
-            <div class="disclaimer"><i>Disclaimer: The results are obtained using automatic tool. Consider visual Quality Control of the fit before taking the numbers below seriously!</i></div>
+            <div class="disclaimer"><i>Disclaimer: The results are obtained using automatic fitting procedure. Consider visual Quality Control of the fit before taking the numbers below seriously!</i></div>
             <fitted-parameters v-bind:parameters="selectedLocation.params"></fitted-parameters>
             <fit-figure v-bind:cacheBraker="fitDate" v-bind:datasetURL="datasetURL" v-bind:locationKey="selectedLocation.value"></fit-figure>
         </div>
@@ -69,7 +69,7 @@ export default {
     return {
       catalogLoaded: false,
       datasetURL: "dataset",
-      fitDate: "13 April 2020",
+      fitDate: "20 April 2020",
       locations: [],
       selectedLocation: null
     }
@@ -143,6 +143,8 @@ export default {
     div.location-info {
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
+        align-items: start;
     }
     div.about {
         border-radius: 4px;

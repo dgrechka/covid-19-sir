@@ -34,5 +34,6 @@ export default {
   border-radius: 4px;
   margin: 5px;
   padding: 0.1em;
+  object-fit: scale-down
 }
 </style>

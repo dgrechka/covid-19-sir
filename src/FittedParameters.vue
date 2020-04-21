@@ -1,6 +1,6 @@
 <template>
   <div class="paramsArea">
-  <h3>SIR model parameters:</h3>
+  <h3>SIR model parameters (and other derived values):</h3>
   <div class="params">
       <div class="pRow">
             <div class="pName"><strong>Parameter</strong></div>
